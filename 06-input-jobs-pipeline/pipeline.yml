@@ -1,0 +1,23 @@
+---
+resources:
+- name: concourse-tutorial
+  type: git
+  source:
+    uri: https://github.com/ruanbekker/concourse-tutorial.git
+    branch: master
+
+- name: python-tests-repo
+  type: git
+  source:
+    uri: https://github.com/ruanbekker/concourse-tutorial.git
+    branch: python-tests
+
+jobs:
+- name: job-test-app
+  public: true
+  plan:
+  - get: concourse-tutorial
+  - get: python-tests-repo
+    trigger: true
+  - task: return-random-message
+    file: concourse-tutorial/06-input-jobs-pipeline/task_run_tests.yml
