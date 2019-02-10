@@ -11,4 +11,4 @@ inputs:
   path: download/python-tests-repo
 
 run:
-  path: concourse-tutorial/task_run_tests.sh
+  path: concourse-tutorial/06-input-jobs-pipeline/task_run_tests.sh
