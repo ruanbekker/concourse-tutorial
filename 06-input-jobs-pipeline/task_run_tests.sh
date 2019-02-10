@@ -2,4 +2,5 @@
 
 set -e
 
-python download/python-tests-repo/scripts/print_message.py
+find . 
+#python download/python-tests-repo/scripts/print_message.py
