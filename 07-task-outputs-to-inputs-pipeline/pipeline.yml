@@ -1,0 +1,41 @@
+---
+resources:
+- name: concourse-tutorial
+  type: git
+  source:
+    uri: https://github.com/ruanbekker/concourse-tutorial.git
+    branch: master
+
+jobs:
+- name: job-pass-files
+  public: true
+  plan:
+  - get: concourse-tutorial
+  - task: create-some-files
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+
+      inputs:
+      - name: concourse-tutorial
+      outputs:
+      - name: some-files
+
+      run:
+        path: concourse-tutorial/07-task-outputs-to-inputs-pipeline/create_some_files.sh
+
+  - task: show-some-files
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+
+      inputs:
+      - name: concourse-tutorial
+      - name: some-files
+
+      run:
+        path: concourse-tutorial/07-task-outputs-to-inputs-pipeline/show_files.sh
