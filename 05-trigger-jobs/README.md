@@ -22,3 +22,10 @@ id  pipeline/job                             build  status     start            
 46  05-timed-pipeline/job-timed-hello-world  1      succeeded  2019-02-10@12:49:41+0200  2019-02-10@12:49:58+0200  17s
 45  05-timed-pipeline/job-hello-world        1      succeeded  2019-02-10@12:49:41+0200  2019-02-10@12:49:54+0200  13s
 ```
+
+To pause the pipeline:
+
+```
+$ fly -t ci pp -p 05-timed-pipeline
+paused '05-timed-pipeline'
+```
