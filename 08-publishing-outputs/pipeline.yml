@@ -1,0 +1,42 @@
+---
+resources:
+- name: concourse-tutorial
+  type: git
+  source:
+    uri: https://github.com/ruanbekker/concourse-tutorial.git
+    branch: master
+
+- name: concourse-date
+  type: git
+  source:
+    uri: git@github.com:ruanbekker/concourse-tutorial.git
+    branch: master
+    private_key: |-
+      -- begin your private key --
+      never commit secrets to version control
+      -- end your private key --
+
+jobs:
+- name: job-bump-date
+  serial: true
+  plan:
+  - get: concourse-tutorial
+  - get: concourse-date
+  - task: bump-timestamp-file
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: { repository: rbekker87/build-tools }
+
+      inputs:
+        - name: concourse-tutorial
+        - name: concourse-date
+      outputs:
+        - name: updated-timestamp
+      run:
+        path: concourse-tutorial/08-publishing-outputs/bump_timestamp.sh
+
+  - put: concourse-date
+    params:
+      repository: updated-timestamp
