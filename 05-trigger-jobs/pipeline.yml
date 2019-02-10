@@ -1,0 +1,31 @@
+---
+resources:
+- name: concourse-tutorial
+  type: git
+  source:
+    uri: https://github.com/ruanbekker/concourse-tutorial.git
+    branch: master
+
+- name: my-timer
+  type: time
+  source:
+    interval: 2m
+
+jobs:
+- name: job-hello-world
+  public: true
+  plan:
+  - get: concourse-tutorial
+    trigger: true
+  - task: hello-world
+    file: concourse-tutorial/00-basic-tasks/task_hello_world.yml
+
+- name: job-timed-hello-world
+  public: true
+  serial: true
+  plan:
+  - get: concourse-tutorial
+  - get: my-timer
+    trigger: true
+  - task: timed-hello-world
+    file: concourse-tutorial/00-basic-tasks/task_hello_world.yml

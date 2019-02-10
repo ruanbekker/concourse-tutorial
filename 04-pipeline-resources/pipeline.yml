@@ -1,0 +1,15 @@
+---
+resources:
+- name: concourse-tutorial
+  type: git
+  source:
+    uri: https://github.com/ruanbekker/concourse-tutorial.git
+    branch: master
+
+jobs:
+- name: job-hello-world
+  public: true
+  plan:
+  - get: concourse-tutorial
+  - task: hello-world
+    file: concourse-tutorial/00-basic-tasks/task_hello_world.yml
