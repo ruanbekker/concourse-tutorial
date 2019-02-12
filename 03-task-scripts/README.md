@@ -7,7 +7,7 @@ With this configuration, it uploads the current working directory to concourse, 
 ```
 $ fly -t ci e -c task_show_hostname.yml
 
-executing build 39 at http://51.15.42.191/builds/39
+executing build 39 at http://10.20.30.40/builds/39
 initializing
 03-task-scripts: 347.15 KiB/s 0s
 running ./03-task-scripts/task_show_hostname.sh
