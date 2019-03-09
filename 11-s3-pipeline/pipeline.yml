@@ -1,0 +1,49 @@
+resources:
+- name: minio-s3
+  type: s3
+  source:
+    regexp: example-file-(.*).txt
+    endpoint: ((minio_endpoint)) # remove if using aws s3
+    bucket: concourse
+    access_key_id: ((minio_access_key))
+    secret_access_key: ((minio_secret_key))
+    disable_ssl: false
+
+jobs:
+- name: minio-s3-write-it-out
+  plan:
+  - task: cat-example-file
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: alpine
+      run:
+        path: sh
+        args:
+        - -c
+        - echo "$BUILD_NAME This is an example file, created $(date)" > file-to-upload/example-file-1.txt
+      outputs:
+        - name: file-to-upload
+  - put: minio-s3
+    params:
+      file: file-to-upload/example-file-*
+
+- name: minio-s3-read-it-out
+  plan:
+  - get: minio-s3
+  - task: cat-example-file
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: alpine
+      inputs:
+      - name: minio-s3
+      run:
+        path: sh
+        args:
+        - -c
+        - cat minio-s3/example-file-*
